@@ -2,17 +2,13 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-=====================
-Supplier Tax Rounding
-=====================
+=======================
+Account Central Billing
+=======================
 
-Sometimes supplier systems use a different rounding method for taxes
-than your own.  In NZ and Austrlia (and most VAT based countries) if you ordinarily
-supply ex Tax you must use round globally.  However, some systems do not support this
-and often supplier invoices mismatch by a cent or so.  This module claculates tax using
-round_per_line if set on the supplier for their invoices.
-
-NOTE: This module does nothing if your default rounding method is round_per_line.
+Sometimes it is necessary to invoice a partner who is a different entity to the one ordering, such as when dealing
+with large buying groups.  This module automatically changes the invoice from the purchasing entity to the invoice
+entity.
 
 Installation
 ============
@@ -22,20 +18,19 @@ There are no special installation instructions for this module.
 Configuration
 =============
 
-There are no specific configuration options in this module.
+#. For each centrally billed partner, select the approriate supplier or customer billing option.
+#. Specify the partner to bill / receive bills from
 
 Usage
 =====
 
-To use this module, you need to:
-
-#. Set the rounding method to Round per Line on the partner.
+Once a partner is configured, there are no usage instructions for regular users, invoices are automatically billed.
+You can search for invoices either using the billing or purchasing entity.
 
 Known issues / Roadmap
 ======================
 
 * Currently no tests.
-* The field is not multicompany aware.  Shouldn't be an issue in practice as ordinarily tax policy is country based and cross border transactions do not attract value added tax.
 
 Bug Tracker
 ===========
