@@ -32,8 +32,13 @@ class AccountJournal(models.Model):
             fields.Date.context_today(move), DEFAULT_SERVER_DATE_FORMAT)
         transaction_date = datetime.strptime(
             move.date, DEFAULT_SERVER_DATE_FORMAT)
+        if transaction_date >= today:
+            return False
         if self.cutoff_type == 'eom':
-            transaction_date += relativedelta(day=31)
+            if transaction_date.month < today.month:
+                transaction_date += relativedelta(day=31)
+            else:
+                return False
         if self.months:
             transaction_date += relativedelta(months=self.months)
         if self.days:
