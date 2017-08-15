@@ -33,6 +33,8 @@ Under Accounting Settings check enforce cutoff and complete policy.
 Note the policy is inclusive, so if you specified 3 days after end of month, then transactions
 on the 3rd for the prior month would be allowed, the 4th would not.
 
+If using account_central_billing the policy is taken from the centrally billed partner.
+
 Known issues / Roadmap
 ======================
 
