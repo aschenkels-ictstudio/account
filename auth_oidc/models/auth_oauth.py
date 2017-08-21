@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+# Copyright 2017 Graeme Gellatly
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+
 from odoo import models, fields, api
 from cryptography.x509 import load_pem_x509_certificate
 from cryptography.hazmat.backends import default_backend
@@ -10,8 +14,6 @@ PEMEND = "\n-----END CERTIFICATE-----\n"
 
 
 class AuthOauthProvider(models.Model):
-    """'OpenID Connect provider'"""
-
     _inherit = 'auth.oauth.provider'
 
     flow = fields.Selection([('access_token', 'OAuth2'),

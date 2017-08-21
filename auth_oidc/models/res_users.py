@@ -1,8 +1,8 @@
-import logging
+# -*- coding: utf-8 -*-
+# Copyright 2017 Graeme Gellatly
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, api
-
-_logger = logging.getLogger(__name__)
 
 
 class ResUsers(models.Model):
