@@ -46,6 +46,6 @@ class AccountJournal(models.Model):
             transaction_date = rrule(
                 DAILY, interval=self.days, byweekday=weekdays,
                 dtstart=transaction_date)[1]
-        if transaction_date > today:
+        if transaction_date <= today:
             return True
         return False
