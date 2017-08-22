@@ -26,8 +26,8 @@ Usage
 Go to Accounting -> Settings -> Journals
 Under Advanced Settings check enforce lock and complete policy.
 
-Note the policy is inclusive, so if you specified 3 days after end of month, then transactions
-on the 3rd for the prior month would be allowed, the 4th would not.
+Note the policy is exclusive, so if you specified 3 days after end of month, then transactions
+on the 3rd for the prior month would not be allowed.
 
 Known issues / Roadmap
 ======================
