@@ -22,6 +22,16 @@ class AccountInvoice(models.Model):
         string='Invoice Partner'
     )
 
+    @api.multi
+    def _get_invoice_partner(self):
+        """
+        Hook method for extensibility to determine which partner should be used
+        for checking the lock date
+        :return: A res.partner recordset
+        """
+        return super(AccountInvoice, self
+                     )._get_invoice_partner() + self.order_partner_id
+
     @api.constrains('partner_id', 'order_partner_id')
     def check_company(self):
         for record in self:
@@ -32,35 +42,38 @@ class AccountInvoice(models.Model):
 
     @api.model
     def create(self, vals):
-        """Function overrides create to ensure that parent account is always used"""
-
+        """Function overrides create to ensure that parent account is
+        always used"""
         if vals.get('partner_id'):
             Partner = self.env['res.partner']
             partner = Partner.browse(vals['partner_id']).commercial_partner_id
-            inv_partner = partner.get_billing_partner(vals)
-            if inv_partner:
-                vals.update({'partner_id': inv_partner.id,
+            inv_p_id = partner.get_billing_partner(vals, self[0])
+            if inv_p_id != partner.id:
+                vals.update({'partner_id': inv_p_id,
                              'order_partner_id': partner.id,
                              'order_invoice_id': vals['partner_id']})
         return super(AccountInvoice, self).create(vals)
 
     @api.multi
     def write(self, vals):
-        """Function overrides create to ensure that parent account is always used"""
+        """Function overrides create to ensure that parent account is
+        always used"""
         if vals.get('partner_id', False):
             Partner = self.env['res.partner']
             partner = Partner.browse(vals['partner_id']).commercial_partner_id
-            inv_partner = partner.get_billing_partner(vals, self[0])
-            if inv_partner:
-                vals.update({'partner_id': inv_partner.id,
+            inv_p_id = partner.get_billing_partner(vals, self[0])
+            if inv_p_id != partner.id:
+                vals.update({'partner_id': inv_p_id,
                              'order_partner_id': partner.id,
                              'order_invoice_id': vals['partner_id']})
         return super(AccountInvoice, self).write(vals)
 
     @api.model
     def search(self, args, **kwargs):
-        """override search so we find subsidiary invoices when looking at that partner
-        @note: this could break quite easily if used with multiple custom filters"""
+        """override search so we find subsidiary invoices when looking at
+        that partner.
+        @note: this could break quite easily if used with multiple
+        custom filters"""
         search_args = args[:]
         for arg in search_args:
             if arg[0] == 'partner_id' and arg[1] in [

@@ -4,7 +4,7 @@
 
 {
     'name': 'Account Central Billing',
-    'version': '10.0.1.0.0',
+    'version': '11.0.1.0.0',
     'license': 'AGPL-3',
     'author': 'Graeme Gellatly',
     'website': 'https://o4sb.com',

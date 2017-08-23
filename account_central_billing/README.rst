@@ -10,6 +10,10 @@ Sometimes it is necessary to invoice a partner who is a different entity to the 
 with large buying groups.  This module automatically changes the invoice from the purchasing entity to the invoice
 entity.
 
+Supports recursive billing.  So if all invoices to Branch A are billed to Partner A, from Company B, then
+Company C invoices for Branch and Partner A will go to Company B, whereas Company B invoices to Branch A will go
+to Partner A.
+
 Installation
 ============
 

@@ -6,7 +6,7 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="account.view_partner_property_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='debit']" position="after">
+            <xpath expr="//field[@name='property_supplier_payment_term_id']" position="after">
                 <field name="tax_calc_method"/>
             </xpath>
         </field>

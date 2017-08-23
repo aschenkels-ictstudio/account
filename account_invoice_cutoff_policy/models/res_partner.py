@@ -32,24 +32,25 @@ class ResPartner(models.Model):
 
     @api.multi
     def _get_lock_date(self, date_invoice):
-        partner = self.commercial_partner_id
-        if not partner.enforce_cutoff:
-            return date_invoice
-        today = datetime.strptime(
-            fields.Date.context_today(partner), DEFAULT_SERVER_DATE_FORMAT)
-        transaction_date = datetime.strptime(
-            date_invoice, DEFAULT_SERVER_DATE_FORMAT)
-        if transaction_date >= today:
-            return date_invoice
-        if partner.cutoff_type == 'eom':
-            if transaction_date.month >= today.month:
-                return date_invoice
-            transaction_date += relativedelta(day=31)
-        if partner.days:
-            weekdays = range(5 if partner.day_type == 'weekday' else 7)
-            transaction_date = rrule(
-                DAILY, interval=partner.days, byweekday=weekdays,
-                dtstart=transaction_date)[1]
-        if transaction_date < today:
-            return partner._get_new_invoice_date(today)
+        for p in self:
+            partner = p.commercial_partner_id
+            if not partner.enforce_cutoff:
+                continue
+            today = datetime.strptime(
+                fields.Date.context_today(partner), DEFAULT_SERVER_DATE_FORMAT)
+            transaction_date = datetime.strptime(
+                date_invoice, DEFAULT_SERVER_DATE_FORMAT)
+            if transaction_date >= today:
+                continue
+            if partner.cutoff_type == 'eom':
+                if transaction_date.month >= today.month:
+                    continue
+                transaction_date += relativedelta(day=31)
+            if partner.days:
+                weekdays = range(5 if partner.day_type == 'weekday' else 7)
+                transaction_date = rrule(
+                    DAILY, interval=partner.days, byweekday=weekdays,
+                    dtstart=transaction_date)[1]
+            if transaction_date < today:
+                return partner._get_new_invoice_date(today)
         return date_invoice

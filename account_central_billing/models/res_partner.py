@@ -47,15 +47,30 @@ class ResPartner(models.Model):
 
     @api.multi
     def get_billing_partner(self, vals, invoice=None):
+
         self.ensure_one()
+
         invoice_type = vals.get('type', invoice.type if invoice else '')
+        if not invoice_type:
+            if 'journal_id' in vals:
+                jtype = self.env['account.journal'].browse(
+                    vals['journal_id']).type
+            else:
+                jtype = invoice.journal_id.type
+            invoice_type = 'in_' if jtype == 'purchase' else 'out_'
+
         if invoice_type.startswith('out_'):
-            return self.invoicing_partner_id
+            f = 'invoicing_partner_id'
         elif invoice_type.startswith('in_'):
-            invoice_company = (
+            f = 'billing_partner_id'
+
+        invoice_company = (
                 self.env['res.company'].browse(vals['company_id'])
                 if 'company_id' in vals else invoice.company_id)
-            company_partner = invoice_company.partner_id
-            return (self.billing_partner_id if
-                    self.billing_partner_id != company_partner else self.id)
-        return False
+        company_partner = invoice_company.partner_id
+        p = self
+        while p[f]:
+                if p[f] == company_partner:
+                    break
+                p = p[f]
+        return p.id

@@ -4,15 +4,16 @@
     <record id="view_partner_form" model="ir.ui.view">
         <field name="name">res.partner.form (in account_central_billing)</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="inherit_id" ref="account.view_partner_property_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='website']" position="after">
                 <field name="store_ref" attrs="{'invisible': [('is_company', '=', False)]}"/>
             </xpath>
-            <xpath expr="//page[@name='sales_purchases']//field[@name='supplier']" position="after">
+            <xpath expr="//field[@name='property_payment_term_id']" position="after">
                 <field name="invoicing_partner_id" attrs="{'invisible': [('is_company', '=', False)]}"
                        groups="account.group_account_manager"/>
-                <newline/>
+            </xpath>
+            <xpath expr="//field[@name='property_supplier_payment_term_id']" position="after">
                 <field name="billing_partner_id" attrs="{'invisible': [('is_company', '=', False)]}"
                        groups="account.group_account_manager"/>
             </xpath>
@@ -36,7 +37,6 @@
                             <field name="city"/>
                             <field name="country_id"/>
                             <field name="mobile"/>
-                            <field name="fax"/>
                             <field name="state_id"/>
                             <field name="image"/>
                             <field name="lang"/>
@@ -94,9 +94,6 @@
                                                     <field name="mobile"/>
                                                 </b>
                                             </div>
-                                            <div t-if="record.fax.raw_value">Fax:
-                                                <field name="fax"/>
-                                            </div>
                                         </div>
                                     </div>
                                 </t>
@@ -146,18 +143,6 @@
                         </form>
                     </field>
                 </page>
-            </xpath>
-        </field>
-    </record>
-
-    <record model="ir.ui.view" id="account_invoice_form_view">
-        <field name="name">account.invoice.form</field>
-        <field name="model">account.invoice</field>
-        <field name="inherit_id" ref="account.invoice_form"/>
-        <field name="arch" type="xml">
-            <xpath expr="//page[@name='other_info']//field[@name='origin']" position="after">
-                <field name="order_partner_id" attrs="{'invisible': [('order_partner_id', '=', False)]}"/>
-                <field name="order_invoice_id" attrs="{'invisible': [('order_invoice_id', '=', False)]}"/>
             </xpath>
         </field>
     </record>

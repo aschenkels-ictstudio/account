@@ -14,7 +14,7 @@ class AccountInvoice(models.Model):
         """
         Hook method for extensibility to determine which partner should be used
         for checking the lock date
-        :return: A singleton res.partner recordset
+        :return: A res.partner recordset
         """
         return self.commercial_partner_id
 
