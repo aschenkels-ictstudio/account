@@ -50,7 +50,9 @@ class ResPartner(models.Model):
 
         self.ensure_one()
 
-        invoice_type = vals.get('type', invoice.type if invoice else '')
+        invoice_type = vals.get('type',
+                                invoice.type if invoice else
+                                self._context.get('type', 'out_invoice'))
         if not invoice_type:
             if 'journal_id' in vals:
                 jtype = self.env['account.journal'].browse(

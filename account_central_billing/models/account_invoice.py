@@ -46,12 +46,13 @@ class AccountInvoice(models.Model):
         always used"""
         if vals.get('partner_id'):
             Partner = self.env['res.partner']
-            partner = Partner.browse(vals['partner_id']).commercial_partner_id
-            inv_p_id = partner.get_billing_partner(vals, self[0])
+            order_partner = Partner.browse(vals['partner_id'])
+            partner = order_partner.commercial_partner_id
+            inv_p_id = partner.get_billing_partner(vals)
             if inv_p_id != partner.id:
                 vals.update({'partner_id': inv_p_id,
                              'order_partner_id': partner.id,
-                             'order_invoice_id': vals['partner_id']})
+                             'order_invoice_id': order_partner.id})
         return super(AccountInvoice, self).create(vals)
 
     @api.multi
