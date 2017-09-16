@@ -2,6 +2,7 @@
 # Copyright 2017 Graeme Gellatly
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from builtins import range
 from datetime import datetime
 from dateutil.rrule import rrule, DAILY
 from dateutil.relativedelta import relativedelta
@@ -42,7 +43,7 @@ class AccountJournal(models.Model):
         if self.months:
             transaction_date += relativedelta(months=self.months)
         if self.days:
-            weekdays = range(5 if self.day_type == 'weekday' else 7)
+            weekdays = list(range(5 if self.day_type == 'weekday' else 7))
             transaction_date = rrule(
                 DAILY, interval=self.days, byweekday=weekdays,
                 dtstart=transaction_date)[1]

@@ -2,11 +2,14 @@
 # Copyright 2017 Graeme Gellatly
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 from odoo import models, fields, api
 from cryptography.x509 import load_pem_x509_certificate
 from cryptography.hazmat.backends import default_backend
 import jwt
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import json
 
 PEMSTART = "-----BEGIN CERTIFICATE-----\n"
@@ -48,7 +51,7 @@ class AuthOauthProvider(models.Model):
         for provider in self:
             if provider.flow != 'id_token':
                 continue
-            f = urllib2.urlopen(provider.validation_endpoint)
+            f = urllib.request.urlopen(provider.validation_endpoint)
             response = json.loads(f.read())
             provider.jwt_keys = self.env['jwt.key']
             keys_to_write = []
